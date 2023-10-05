@@ -1,0 +1,93 @@
+import java.awt.BasicStroke; 
+import java.awt.Color; 
+import java.awt.Font;
+import java.awt.Graphics; 
+import java.awt.Graphics2D; 
+import java.awt.RenderingHints; 
+import java.util.Calendar;
+import javax.swing.JFrame; 
+import javax.swing.JPanel;
+class Clock extends JPanel implements Runnable
+{
+private Thread thread;
+private Calendar calendar;
+private int fontsize = 15; 
+private int fontPadding = 20;
+public Clock() 
+{ 
+setBackground(Color.BLACK); 
+thread = new Thread(this); 
+thread.start();
+}
+public void run() 
+{ 
+while (true) 
+{
+calendar = Calendar.getInstance(); 
+repaint();
+try
+{
+Thread.sleep(1000);
+}
+catch (InterruptedException e)
+{
+e.printStackTrace();
+} 
+}
+}
+protected void paintComponent(Graphics g) 
+{ 
+super.paintComponent(g);
+Graphics2D g2 = (Graphics2D) g; 
+g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+RenderingHints.VALUE_ANTIALIAS_ON); 
+int width = getWidth();
+int height = getHeight();
+int radius = Math.min(width, height) / 2 - fontPadding; 
+int x = width / 2 - radius;
+int y = height / 2 - radius; 
+g2.setColor(Color.BLUE); 
+g2.drawOval(x, y, radius * 2, radius * 2);
+Font font = new Font("Ariel", Font.BOLD, fontsize); 
+g2.setFont(font);
+g2.setColor(Color.PINK); 
+for (int i = 1; i <= 12; i++) 
+{
+double angle = (i - 3) * 30 * Math.PI / 180;
+int x1 = (int) (width / 2 + Math.cos(angle) * (radius - fontPadding)); 
+int y1 = (int) (height / 2 + Math.sin(angle) * (radius - fontPadding)); 
+String number = Integer.toString(i);
+int stringWidth = g2.getFontMetrics().stringWidth(number); 
+int stringHeight = g2.getFontMetrics().getAscent();
+g2.drawString(number, x1 - stringWidth / 2, y1 + stringHeight / 2);
+}
+int hour = calendar.get(Calendar.HOUR);
+int minute = calendar.get(Calendar.MINUTE); 
+int second = calendar.get(Calendar.SECOND);
+double hourAngle = (hour + minute / 60.0) * 30.0; 
+double minuteAngle = (minute + second / 60.0) * 6.0; 
+double secondAngle = second * 6.0;
+drawHand(g2, x + radius, y + radius, hourAngle, radius * 0.5, 6);
+drawHand(g2, x + radius, y + radius, minuteAngle, radius * 0.7, 4);
+drawHand(g2, x + radius, y + radius, secondAngle, radius * 0.9, 2);
+}
+private void drawHand(Graphics2D g2, int x, int y, double angle, double length, 
+int width) 
+{ 
+angle = Math.toRadians(angle - 90);
+int x2 = (int) (x + length * Math.cos(angle)); 
+int y2 = (int) (y + length * Math.sin(angle)); 
+g2.setStroke(new BasicStroke(width));
+g2.drawLine(x, y, x2, y2);
+}
+public static void main(String[] args) 
+{
+JFrame frame = new JFrame("Clock Animation "); 
+frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+frame.setSize(400, 400);
+frame.setResizable(false); 
+frame.setLocationRelativeTo(null); 
+frame.add(new Clock()); 
+frame.setVisible(true);
+}
+} 
