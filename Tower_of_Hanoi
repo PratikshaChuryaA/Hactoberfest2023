@@ -29,7 +29,7 @@ private:
 int main() {
     int numDisks;
     cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
-    cout<<"Welcome to the Tower of Hanoi"<<endl;
+    cout<<"Welcome to the Tower of Hanoi problem"<<endl;
     cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
     cout << "Enter the number of disks: ";
     cin >> numDisks;
