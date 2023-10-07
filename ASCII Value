@@ -1,0 +1,4 @@
+string = input()
+for k in string:
+    ASCII = ord(k)
+    print(k,"\t", ord(k))
