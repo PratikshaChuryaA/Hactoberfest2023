@@ -1,0 +1,6 @@
+n = float(input())
+
+if abs(n)% 2 == 0:
+    print("Even number")
+elif abs(n) % 2 != 0:
+    print("Odd Number")
