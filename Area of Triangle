@@ -1,0 +1,6 @@
+height = float(input())
+base = float(input())
+
+A = 0.5 * base * height
+
+print(A)
