@@ -1,4 +1,4 @@
-# HacktoberFest2023
+# Hacktoberfest2023
 
 This is open repo for all beginners push yours codes here.
 
