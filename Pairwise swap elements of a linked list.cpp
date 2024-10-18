@@ -10,30 +10,29 @@ struct Node {
 // Function to swap nodes pairwise in the linked list
 Node* pairwiseSwap(Node* head) {
     // If the list is empty or has only one node, no need to swap
-    if (head == nullptr || head->next == nullptr) {
+    if (!head || !head->next) {
         return head;
     }
 
     // Initialize pointers for swapping
+    Node* newHead = head->next;
     Node* prev = nullptr;
     Node* current = head;
-    Node* newHead = nullptr;
 
-    while (current != nullptr && current->next != nullptr) {
+    while (current && current->next) {
         Node* firstNode = current;
         Node* secondNode = current->next;
-        
+
         // Swap the nodes
         firstNode->next = secondNode->next;
         secondNode->next = firstNode;
 
         // Adjust the previous pointer
-        if (prev != nullptr) {
+        if (prev) {
             prev->next = secondNode;
-        } else {
-            newHead = secondNode;
         }
 
+        // Move pointers forward
         prev = firstNode;
         current = firstNode->next;
     }
@@ -43,7 +42,7 @@ Node* pairwiseSwap(Node* head) {
 
 // Function to print the linked list
 void printList(Node* head) {
-    while (head != nullptr) {
+    while (head) {
         std::cout << head->data << " ";
         head = head->next;
     }
@@ -63,6 +62,13 @@ int main() {
 
     std::cout << "List after Pairwise Swapping: ";
     printList(head);
+
+    // Free allocated memory
+    while (head) {
+        Node* temp = head;
+        head = head->next;
+        delete temp;
+    }
 
     return 0;
 }

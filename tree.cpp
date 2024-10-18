@@ -1,5 +1,5 @@
 #include <iostream>
-#include <list>
+#include <queue>
 using namespace std;
 
 struct Node {
@@ -16,27 +16,52 @@ public:
 
     BinaryTree() : root(nullptr) {}
 
-    void insert(int value, char pos) {
-        if (root == nullptr) {
+    ~BinaryTree() {
+        clear(root);
+    }
+
+    void insert(int value) {
+        if (!root) {
             root = new Node(value);
-        } else {
-            insertRec(root, value, pos);
+            return;
+        }
+
+        queue<Node*> q;
+        q.push(root);
+
+        while (!q.empty()) {
+            Node* current = q.front();
+            q.pop();
+
+            if (!current->left) {
+                current->left = new Node(value);
+                return;
+            } else {
+                q.push(current->left);
+            }
+
+            if (!current->right) {
+                current->right = new Node(value);
+                return;
+            } else {
+                q.push(current->right);
+            }
         }
     }
 
     void breadthFirstTraversal() const {
         if (!root) return;
 
-        list<Node*> queue;
-        queue.push_back(root);
+        queue<Node*> q;
+        q.push(root);
 
-        while (!queue.empty()) {
-            Node* current = queue.front();
+        while (!q.empty()) {
+            Node* current = q.front();
             cout << current->val << " ";
-            queue.pop_front();
+            q.pop();
 
-            if (current->left) queue.push_back(current->left);
-            if (current->right) queue.push_back(current->right);
+            if (current->left) q.push(current->left);
+            if (current->right) q.push(current->right);
         }
     }
 
@@ -65,33 +90,23 @@ public:
     }
 
 private:
-    void insertRec(Node* current, int value, char pos) {
-        if (pos == 'l') {
-            if (current->left == nullptr) {
-                current->left = new Node(value);
-            } else {
-                cout << "Left child already exists. Choose another position.\n";
-            }
-        } else if (pos == 'r') {
-            if (current->right == nullptr) {
-                current->right = new Node(value);
-            } else {
-                cout << "Right child already exists. Choose another position.\n";
-            }
-        } else {
-            cout << "Invalid position. Use 'l' for left or 'r' for right.\n";
+    void clear(Node* node) {
+        if (node) {
+            clear(node->left);
+            clear(node->right);
+            delete node;
         }
     }
 };
 
 int main() {
     BinaryTree tree;
-    int choice, value;
-    char pos;
+    int value;
+    char choice;
 
     cout << "Enter the value of root node: ";
     cin >> value;
-    tree.insert(value, 'r'); // Insert root
+    tree.insert(value); // Insert root
 
     do {
         cout << "\n1. Insert\n2. Breadth First Traversal\n3. Preorder Traversal\n4. Inorder Traversal\n5. Postorder Traversal\n0. Exit\n";
@@ -99,33 +114,39 @@ int main() {
         cin >> choice;
 
         switch (choice) {
-        case 1:
+        case '1':
             cout << "Enter the value to be inserted: ";
             cin >> value;
-            cout << "Left or Right of Root (l/r): ";
-            cin >> pos;
-            tree.insert(value, pos);
+            tree.insert(value);
             break;
-        case 2:
+        case '2':
+            cout << "Breadth First Traversal: ";
             tree.breadthFirstTraversal();
+            cout << endl;
             break;
-        case 3:
+        case '3':
+            cout << "Preorder Traversal: ";
             tree.preorderTraversal(tree.root);
+            cout << endl;
             break;
-        case 4:
+        case '4':
+            cout << "Inorder Traversal: ";
             tree.inorderTraversal(tree.root);
+            cout << endl;
             break;
-        case 5:
+        case '5':
+            cout << "Postorder Traversal: ";
             tree.postorderTraversal(tree.root);
+            cout << endl;
             break;
-        case 0:
+        case '0':
             cout << "Exiting...\n";
             break;
         default:
             cout << "Invalid choice. Please try again.\n";
             break;
         }
-    } while (choice != 0);
+    } while (choice != '0');
 
     return 0;
 }
