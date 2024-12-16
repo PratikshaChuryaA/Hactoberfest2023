@@ -1,0 +1,28 @@
+void helper(int arr[],int size,int index ,int sum,int curr_sum,int &total){
+	    if(index==size-1){
+	        if(curr_sum==sum){
+	            total++;
+	        }
+	        if(curr_sum+arr[index]==sum){
+	            total++;
+	        }
+	        return;
+	    }
+	    else{
+	        helper(arr,size,index+1,sum,curr_sum,total);
+	        if(curr_sum+arr[index]<=sum){
+	        helper(arr,size,index+1,sum,curr_sum+arr[index],total);
+	        }
+	        return;
+	        
+	    }
+	}
+	
+	int perfectSum(int arr[], int n, int sum)
+	{
+        // Your code goes here
+        vector<int>temp;
+        int total=0;
+        helper(arr,n,0,sum,0,total);
+        return total;
+	}
